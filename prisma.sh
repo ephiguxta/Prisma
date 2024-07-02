@@ -16,7 +16,7 @@ fi
 
 DOMAIN="$1"
 SAVE="$1.tmp"
-FILES=("/home/$USER/Tools/subEnumr/big.txt" "/home/$USER/Tools/subEnumr/common-and-portuguese.txt")
+FILES=("/your/file/path" "/your/second/file/path")
 LGT=$(echo ${#FILES[@]})
 
 for ((i=0; i<$LGT; i++));

@@ -9,7 +9,7 @@ import dns.resolver
 import requests
 import re
 import json
-
+import sys
 
 def resolve_host_name(domain):
     ip = socket.gethostbyname(domain)

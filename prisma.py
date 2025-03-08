@@ -8,14 +8,12 @@ import subprocess
 import dns.resolver
 import requests
 import re
-import json
 import sys
 
 def resolve_host_name(domain):
     ip = socket.gethostbyname(domain)
-    print(ip, "\n")
+    print("\nIP:", ip)
     return
-
 
 def resolve_whois(domain):
     who = whois.whois(domain)
@@ -35,19 +33,21 @@ def resolve_whois(domain):
     # Avaliar domains secundários presentes em e-mails
     print("\nPossíveis domains interessantes para avaliar:")
 
-    if who.email is None:
-        return
+    if "email" in who:
+        if who.email is not None:
+            if isinstance(who.email, list):
+                for i in who.email:
+                    print(i)
+            else:
+                print(who.email)
     
-    if who.emails is None:
-        return
-
-    if who.email is list:
-        for i in who.email:
-            print(i)
-    else:
-        print(who.email)
-    return
-
+    if "emails" in who:
+        if who.emails is not None:
+            if isinstance(who.emails, list):
+                for i in who.emails:
+                    print(i)
+            else:
+                print(who.emails)
 
 def get_records(domain):
     resolver = dns.resolver.Resolver()
@@ -68,7 +68,6 @@ def get_records(domain):
         print(rdata.exchange)
 
     return
-
 
 def get_dns_dumpster(domain):
     url = "https://dnsdumpster.com"
@@ -142,28 +141,25 @@ def get_dns_dumpster(domain):
     print(response.status_code)  # Código de status HTTP
     print(response.text)  # Corpo da resposta
 
-
 def main():
     if len(sys.argv) < 2:
         print("Usage:", sys.argv[0], "<domain>")
         exit(1)
 
     domain = str(sys.argv[1])
-    print("Domínio para scan:", domain)
+    print("Domain alvo:", domain + ".", " Boa sorte ;)")
 
     # Resolver hostname
     resolve_host_name(domain)
 
-    # whois
+    # Whois
     resolve_whois(domain)
 
-    # obter records do domain
+    # Obter records do domain
     get_records(domain)
 
-    # web scrapper do dnsdumpster
-
-
-# get_dns_dumpster(domain)
+    # Web scraper do dnsdumpster
+    #get_dns_dumpster(domain)
 
 if __name__ == "__main__":
     main()
